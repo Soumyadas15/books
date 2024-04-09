@@ -14,7 +14,7 @@ export const Topbar = () => {
     const pathname = usePathname();
 
     useEffect(() => {
-        if(pathname === '/'){
+        if(pathname === '/conversations'){
             setHeading('Conversation');
         }
         else if(pathname === '/history'){

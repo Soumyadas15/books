@@ -1,12 +1,13 @@
 "use client"
 
-import { Book, BookAIcon, BookPlus, Search } from "lucide-react"
+import animationData from '@/public/animations/loading.json'
+import { Book, BookAIcon, BookPlus, Search, SearchIcon } from "lucide-react"
 import { Button } from "./ui/button"
 import { useModal } from "@/hooks/use-modal-store"
 import { Card } from "./ui/card"
+import Lottie from "lottie-react"
 
 export const EmptyConversation = () => {
-
     const { onOpen } = useModal()
     return (
         <>
@@ -18,19 +19,21 @@ export const EmptyConversation = () => {
             </svg>
                 
 
-            <Card className="p-10 bg-transparent transition duration-300 h-[80%] w-[60%] flex gap-6 flex-col items-center justify-center">
+            <Card className="p-10 mt-10 border-none shadow-none bg-transparent transition duration-300 h-[80%] w-[60%] flex gap-6 flex-col items-center justify-center">
+                <div className='w-[20rem] h-[20rem]'>
+                    <Lottie animationData={animationData}/>
+                </div>
                 
-                <BookAIcon style={{ stroke: "url(#blue-gradient)" }} size={150} />
-                <p className="text-center dark:text-neutral-400 text-sm">
-                    Imagine a world where finding your next read is as easy as buttering toast. Enter Pages.ai, the magical tool that's like having a personal book genie at your service.
-                </p>
+                <div className="flex flex-col gap-3">
+                    <h1 className="text-center font-bold dark:text-neutral-300 text-2xl">
+                        Ask Pages.ai
+                    </h1>
+                    <p className=" dark:text-neutral-300">
+                        Clcik on the search book button to search for a book
+                    </p>
 
-                <Button 
-                    onClick={() => onOpen('searchModal')}
-                    className="flex items-center gap-2">
-                    <Search size={22}/>
-                    Search for a book now
-                </Button>
+                </div>
+                
             </Card>
         </>
 

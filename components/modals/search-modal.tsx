@@ -8,12 +8,10 @@ import { Input } from "../ui/input"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useModal } from "@/hooks/use-modal-store"
 import { AnimatedDiv } from "../ui/animated-div"
-import { Textarea } from "../ui/textarea"
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SearchSchema } from "@/schemas"
-import * as z from "zod";
-import OpenAI from "openai";
-
+import { useRouter } from "next/navigation"
+import axios from "axios"
+import { createChat } from "@/actions/chats"
+import { useSearchMessage } from "@/contexts/SearchMessage"
 
 enum STEPS{
     NAME = 0,
@@ -23,18 +21,24 @@ enum STEPS{
 
 export const SearchModal = () => {
 
-
+    const router = useRouter();
     const form = useForm({
         defaultValues: {
           name: "",
           author: "",
         },
-      });
-    
+    });
 
+    const { setSearchMessage, setLoading, setReply } = useSearchMessage();
+
+    const [prompt, setPrompt] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [response, setResponse] = useState("");
     const { isOpen, onClose, type } = useModal();
     const [step, setStep] = useState(STEPS.NAME);
     const [description, setDescription] = useState('Enter book name');
+
+    
 
     const [messages, setMessages] = useState([
         {
@@ -73,23 +77,34 @@ export const SearchModal = () => {
     }, [step]);
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        if(step === STEPS.AUTHOR){
-            const response = await fetch("/api/chat", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ messages }),
-              });
-          
-              const data = await response.json();
-              const { output } = data;
-              console.log("OpenAI replied...", output.content);
+        if (step !== STEPS.AUTHOR) {
+            onNext();
+        } else {
+            onClose();
+            setReply(null);
+            setLoading(false);
+            const searchMessage = `Search about the book named ${data.name} written by ${data.author}`;
+            setSearchMessage(searchMessage);
+            try{
+                setLoading(true);
+                const axiosConfig = {
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                };
+                const requestData = {
+                    messages: searchMessage
+                };
+                const response = await axios.post('/api/chat', requestData, axiosConfig);
+                setReply(response.data);
+                setLoading(false);
+            } catch (error : any){
+                console.log(error);
+            }
         }
-        else{
-           onNext(); 
-        }
+        
     }
+    
 
     useEffect(() => {
         if (step === STEPS.AUTHOR){
