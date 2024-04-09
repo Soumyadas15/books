@@ -12,21 +12,6 @@ import { UserButton } from "@clerk/nextjs";
 
 const poppins = Montserrat ({ weight: '600', subsets: ['latin'] });
 
-const routes = [
-  {
-    label: 'Conversation',
-    icon: LayoutDashboard,
-    href: '/',
-    color: "text-sky-500"
-  },
-  {
-    label: 'History',
-    icon: MessageSquare,
-    href: '/conversation',
-    color: "text-violet-500",
-  }
-];
-
 export const Sidebar = () => {
   const pathname = usePathname();
   console.log(pathname)
@@ -41,8 +26,8 @@ export const Sidebar = () => {
                 icon={<MessageCircle strokeWidth={2}/>} 
                 label="Conversation" 
                 color="text-violet-500"
-                route="/conversations"
-                isActive = {pathname === '/conversations'}
+                route="/"
+                isActive = {pathname === '/'}
             />
             <SidebarItem 
                 icon={<History strokeWidth={2}/>} 

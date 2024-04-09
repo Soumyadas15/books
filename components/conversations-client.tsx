@@ -34,7 +34,7 @@ export const ConversationsClient = ({
                 <EmptyConversation/>
             )}
             {(loading && !reply) && (
-                <div className="bg-neutral-100 transition duration-300 rounded-md p-6 dark:bg-neutral-800 w-full mt-4 flex flex-col items-center">
+                <div className=" transition duration-300 rounded-md p-6 w-full mt-4 flex flex-col items-center">
                     <div className="w-[12rem] h-[12rem]">
                         <Loader />
                     </div>

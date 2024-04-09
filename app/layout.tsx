@@ -9,6 +9,7 @@ import { ModalProvider } from "@/providers/modal-provider";
 import { ClerkProvider } from '@clerk/nextjs'
 import { initialProfile } from "@/lib/initial-profile";
 import { NameModal } from "@/components/modals/name-modal";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,12 +29,25 @@ export default async function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${inter.className} transition duration-300`}>
-          <ThemeProvider
+        <ThemeProvider
             attribute="class"
             defaultTheme="light"
           >
-
+            <ModalProvider/>
+            <div className="flex w-full h-screen">
+              <div className="h-full flex w-[16%] bg-neutral-200 ease-in-out dark:bg-black transition duration-300">
+                <Sidebar/>
+              </div>
+              <div className="h-full w-[84%]">
+                <div className="h-[10%]">
+                  <Topbar/>
+                </div>
+                <div className="h-[90%] w-full">
                   {children}
+                </div>
+              </div>
+            </div>
+            <Toaster />
           </ThemeProvider>
         </body>
       </html>

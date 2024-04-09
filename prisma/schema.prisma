@@ -19,6 +19,7 @@ model User {
   name String
   imageUrl String @db.Text
   email String @db.Text
+  password String @db.Text
 
   conversations Conversation[]
   

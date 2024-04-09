@@ -38,7 +38,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({
             "
             >
             <Lottie animationData={animationData} className="w-48"/>
-            <div className="text-xl font-bold">You don't have any chats</div>
+            <div className="text-xl font-bold">You don&apos;t have any chats</div>
         </div>
     );
 }
