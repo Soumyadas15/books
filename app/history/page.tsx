@@ -5,14 +5,14 @@ import { DeleteModal } from "@/components/modals/delete-modal";
 import { ThemeToggle } from "@/components/toggles/theme-toggle";
 import { Topbar } from "@/components/topbar/topbar";
 import { Button } from "@/components/ui/button";
-import { currentProfile } from "@/lib/current-profile";
+import { initialProfile } from "@/lib/initial-profile";
 import Image from "next/image";
 
 export default async function Home() {
 
   const replies = await getChats();
   const chats = replies?.success;
-  const user = await currentProfile();
+  const user = await initialProfile();
   return (
     <>
       <DeleteModal/>

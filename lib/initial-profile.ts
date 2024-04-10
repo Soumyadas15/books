@@ -1,32 +1,64 @@
-import { currentUser, redirectToSignIn, redirectToSignUp } from "@clerk/nextjs";
-import { db } from "./db";
+import { db } from "@/lib/db";
+import { getUserProfileData } from "./profile-service";
+import { redirect } from "next/navigation";
+import getManagementToken from "@/actions/getManagementToken";
+import getUser from '@/lib/get-user';
 
+
+class AuthenticationError extends Error {
+  constructor(public redirectPath: string) {
+    super('Authentication required');
+    this.name = 'AuthenticationError';
+  }
+}
 
 export const initialProfile = async () => {
-  const user = await currentUser();
+  try {
+    const user = await getUserProfileData();
 
-  if (!user){
-    return null
-  }
+    const existingProfile = await db.user.findUnique({
+      where: {
+        userId: user.sub,
+      },
+    });
 
-  const profile = await db.user.findUnique({
-    where: {
-      userId: user.id
+    if (existingProfile) {
+      return existingProfile;
     }
-  });
 
-  if (profile) {
+    const token = await getManagementToken();
+    const myUser = await getUser(user.sub, token);
+    
+    let userEmail = isEmail(myUser.nickname) ? myUser.nickname : myUser.name;
+
+    const profile = await db.user.upsert({
+      where: {
+        userId: user.sub,
+      },
+      update: {
+        name: myUser.name,
+        imageUrl: myUser.picture,
+        email: userEmail,
+      },
+      create: {
+        userId: user.sub,
+        name: myUser.name,
+        imageUrl: myUser.picture,
+        email: userEmail,
+      },
+    });
+
     return profile;
-  }
 
-  const newProfile = await db.user.create({
-    data: {
-      userId: user.id,
-      name: `${user.firstName} ${user.lastName}`,
-      imageUrl: user.imageUrl,
-      email: user.emailAddresses[0].emailAddress
+  } catch (error) {
+    if (error instanceof Error && error.message === 'Requires authentication') {
+      redirect('/api/auth/login')
+    } else {
+      throw error;
     }
-  });
+  }
+};
 
-  return newProfile;
+const isEmail = (email: string) => {
+  return /\S+@\S+\.\S+/.test(email);
 };

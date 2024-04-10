@@ -19,12 +19,12 @@ export const EmptyConversation = () => {
             </svg>
                 
 
-            <Card className="p-10 mt-10 border-none shadow-none bg-transparent transition duration-300 h-[80%] w-[60%] flex gap-6 flex-col items-center justify-center">
-                <div className='w-[20rem] h-[20rem]'>
+            <Card className="p-10 mt-10 border-none shadow-none bg-transparent transition duration-300 text-center h-[80%] w-[90%] md:w-[60%] flex gap-6 flex-col items-center justify-center">
+                <div className='w-[15rem] h-[15rem] md:w-[20rem] md:h-[20rem]'>
                     <Lottie animationData={animationData}/>
                 </div>
                 
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 -mt-3">
                     <h1 className="text-center font-bold dark:text-neutral-300 text-2xl">
                         Ask Pages.ai
                     </h1>

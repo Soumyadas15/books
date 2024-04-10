@@ -1,5 +1,5 @@
-import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
+import { initialProfile } from "@/lib/initial-profile";
 import { NextResponse } from "next/server";
 import { OpenAI } from "openai";
 
@@ -13,7 +13,7 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { messages } = body;
 
-        const currentUser = await currentProfile();
+        const currentUser = await initialProfile();
 
         if (!currentUser){
             return new Response("User not found", { status: 400 });
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
     try{
-        const currentUser = await currentProfile();
+        const currentUser = await initialProfile();
 
         if (!currentUser){
             return new Response("User not found", { status: 400 });

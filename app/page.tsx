@@ -5,13 +5,13 @@ import { SearchModal } from "@/components/modals/search-modal";
 import { ThemeToggle } from "@/components/toggles/theme-toggle";
 import { Topbar } from "@/components/topbar/topbar";
 import { SearchMessageProvider } from "@/contexts/SearchMessage";
-import { currentProfile } from "@/lib/current-profile";
+import { initialProfile } from "@/lib/initial-profile";
 import Image from "next/image";
 
 export default async function Home() {
 
     const chats = await getChats();
-    const user = await currentProfile();
+    const user = await initialProfile();
   return (
     <SearchMessageProvider>
         <SearchModal/>

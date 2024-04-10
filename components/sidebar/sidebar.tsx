@@ -9,15 +9,23 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { SidebarItem } from "./sidebar-item";
 import { UserButton } from "@clerk/nextjs";
+import { UserAvatar } from "../avatar/UserAvatar";
+import { User } from "@prisma/client";
 
 const poppins = Montserrat ({ weight: '600', subsets: ['latin'] });
 
-export const Sidebar = () => {
+interface SidebarProps {
+  user: User;
+}
+export const Sidebar = ({
+  user,
+} : SidebarProps) => {
+
   const pathname = usePathname();
   console.log(pathname)
 
   return (
-    <div className="flex transition duration-300 flex-col items-start justify-between w-full h-full px-4 py-4 bg-white shadow-r-lg dark:shadow-none border-r-[1px] dark:border-black dark:bg-black text-white">
+    <div className="hidden md:flex transition duration-300 flex-col items-start justify-between w-full h-full px-4 py-4 bg-white shadow-r-lg dark:shadow-none border-r-[1px] dark:border-black dark:bg-black text-white">
         <div className="h-[14%] w-full flex items-start">
             <h1 className="text-[1.5rem] font-bold bg-gradient-to-r from-pink-500 to-rose-600 text-transparent bg-clip-text">Pages.ai</h1>
         </div>
@@ -37,8 +45,8 @@ export const Sidebar = () => {
                 isActive = {pathname === '/history'}
             />
         </div>
-        <div className="w-12 h-12">
-          <UserButton/>
+        <div>
+          <UserAvatar user={user} />
         </div>
       
     </div>

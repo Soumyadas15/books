@@ -4,12 +4,11 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Sidebar } from "@/components/sidebar/sidebar";
 import { Topbar } from "@/components/topbar/topbar";
-import { SearchModal } from "@/components/modals/search-modal";
 import { ModalProvider } from "@/providers/modal-provider";
-import { ClerkProvider } from '@clerk/nextjs'
 import { initialProfile } from "@/lib/initial-profile";
-import { NameModal } from "@/components/modals/name-modal";
 import { Toaster } from "sonner";
+import { UserProvider } from '@auth0/nextjs-auth0/client';
+import { Navbar } from "@/components/mobile-nav/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,32 +24,35 @@ export default async function RootLayout({
 }>) {
 
   const currentUser = await initialProfile();
+
   return (
-    <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} transition duration-300`}>
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-          >
-            <ModalProvider/>
-            <div className="flex w-full h-screen">
-              <div className="h-full flex w-[16%] bg-neutral-200 ease-in-out dark:bg-black transition duration-300">
-                <Sidebar/>
-              </div>
-              <div className="h-full w-[84%]">
-                <div className="h-[10%]">
-                  <Topbar/>
+        <UserProvider>
+          <body className={`${inter.className} transition duration-300`}>
+          <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+            >
+              <Navbar user={currentUser}/>
+              <ModalProvider/>
+              <div className="flex w-full h-screen">
+                <div className="h-full flex w-[0%] md:w-[16%] bg-neutral-200 ease-in-out dark:bg-black transition duration-300">
+                  <Sidebar user={currentUser}/>
                 </div>
-                <div className="h-[90%] w-full">
-                  {children}
+                <div className="h-full w-full md:w-[84%]">
+                  <div className="h-[10%]">
+                    <Topbar/>
+                  </div>
+                  <div className="h-[90%] w-full">
+                    {children}
+                  </div>
                 </div>
               </div>
-            </div>
-            <Toaster />
-          </ThemeProvider>
-        </body>
+              <Toaster />
+            </ThemeProvider>
+          </body>
+        </UserProvider>
+
       </html>
-    </ClerkProvider>
   );
 }

@@ -88,13 +88,16 @@ export const Modal = ({
                     
                 </div>
 
-                <DialogFooter>
+                <DialogFooter className="gap-2">
                     {secondaryActionLabel && (
-                        <Button variant={'outline'} onClick={secondaryAction}>
+                        <Button 
+                            className="w-full"
+                            variant={'outline'} onClick={secondaryAction}>
                             {secondaryActionLabel}
                         </Button>
                     )}
                     <Button 
+                        className="w-full"
                         //@ts-ignore
                         variant={actionLabelVariant} 
                         onClick={onSubmit}
